@@ -30,34 +30,14 @@ d.rectangle([0, 112, W, 117], fill=GOLD)
 
 # ---- lead panel: Kyiv ------------------------------------------------------
 lx0, ly0, lx1, ly1 = 16, 128, 1008, 424
-for i in range(60):  # night sky bands
-    t = i / 60
-    c = (int(16 + 40 * t), int(24 + 30 * t), int(58 + 30 * t))
-    d.rectangle([lx0, ly0 + i * 3, lx1, ly0 + i * 3 + 3], fill=c)
-d.rectangle([lx0, ly0 + 180, lx1, ly1], fill=(30, 40, 70))  # river
-# skyline
-heights = [70, 110, 55, 130, 80, 100, 60, 120, 75, 95, 65, 115, 85, 70, 105]
-x = lx0 + 8
-for h in heights:
-    d.rectangle([x, ly0 + 180 - h, x + 52, ly0 + 180], fill=(10, 14, 26))
-    for wy in range(ly0 + 180 - h + 10, ly0 + 170, 16):
-        for wx in range(x + 8, x + 46, 14):
-            if (wx + wy) % 3 == 0:
-                d.rectangle([wx, wy, wx + 6, wy + 8], fill=(255, 196, 64))
-    x += 64
-# bridge
-d.arc([lx0 + 120, ly0 + 120, lx1 - 120, ly0 + 260], 180, 360, fill=(200, 205, 220), width=5)
-d.line([lx0 + 120, ly0 + 190, lx1 - 120, ly0 + 190], fill=(200, 205, 220), width=4)
-for bx in range(lx0 + 180, lx1 - 160, 60):
-    d.line([bx, ly0 + 190, bx, ly0 + 150], fill=(160, 168, 190), width=3)
-# missile trails + bursts
-for (mx, my, tx, ty) in [(180, 150, 420, 300), (300, 140, 560, 320), (760, 150, 640, 310)]:
-    d.line([mx, my, tx, ty], fill=(255, 170, 60), width=3)
-    d.ellipse([tx - 6, ty - 6, tx + 6, ty + 6], fill=(255, 220, 120))
-    for a in range(0, 360, 45):
-        ex = tx + 26 * math.cos(math.radians(a))
-        ey = ty + 26 * math.sin(math.radians(a))
-        d.line([tx, ty, ex, ey], fill=(255, 120, 40), width=3)
+lead = Image.open("assets/media-generation-news-lead-kyiv-0-2288a6bf-31df-430a-91e6-1503df2bba50.webp").convert("RGB")
+lw, lh = lead.size
+target_ratio = (lx1 - lx0) / (ly1 - ly0 - 86)
+crop_h = int(lw / target_ratio)
+top = max(0, (lh - crop_h) // 2 - 40)
+lead = lead.crop((0, top, lw, top + crop_h)).resize((lx1 - lx0, ly1 - ly0 - 86), Image.LANCZOS)
+img.paste(lead, (lx0, ly0))
+d = ImageDraw.Draw(img)
 # headline band
 d.rectangle([lx0, ly1 - 86, lx1, ly1], fill=(8, 10, 18))
 d.text((lx0 + 18, ly1 - 62), "RUSSIAN BARRAGE KILLS AT LEAST 3 IN KYIV",
@@ -75,11 +55,23 @@ def fit(text, path, size, max_w):
     return F(path, size)
 
 
+GRID_IMG = Image.open("assets/media-generation-news-grid-scenes-0-65756077-79c9-409f-89c8-de4a64060295.webp").convert("RGB")
+
+
+def cell(idx):
+    gw, gh = GRID_IMG.size
+    cw, ch = gw // 3, gh // 3
+    cx, cy = (idx % 3) * cw, (idx // 3) * ch
+    m = 14
+    return GRID_IMG.crop((cx + m, cy + m, cx + cw - m, cy + ch - m))
+
+
 def panel(px, py, bg, draw_scene, head, sub):
     pw, ph = 320, 158
     d.rectangle([px, py, px + pw, py + ph], fill=(255, 255, 255), outline=INK, width=2)
-    d.rectangle([px + 2, py + 2, px + pw - 2, py + 88], fill=bg)
-    draw_scene(px, py)
+    scene = cell(panel.counter).resize((pw - 4, 86), Image.LANCZOS)
+    img.paste(scene, (px + 2, py + 2))
+    panel.counter += 1
     d.text((px + 12, py + 102), head, font=fit(head, SANSB, 21, pw - 24), fill=INK, anchor="lm")
     d.text((px + 12, py + 132), sub, font=fit(sub, SANSB, 16, pw - 24), fill=(60, 60, 75), anchor="lm")
 
@@ -172,6 +164,7 @@ grid = [
     ((30, 120, 70), sc_globe, "COP31 talks stall", "No deal in sight, talks go on"),
     ((90, 40, 140), sc_pad, "GTA 6 smashes sales records", "Sensor Tower est. $2.36B incl. pre-orders"),
 ]
+panel.counter = 0
 gx, gy = 16, 436
 for i, (bg, sc, head, sub) in enumerate(grid):
     panel(gx + (i % 3) * 336, gy + (i // 3) * 170, bg, sc, head, sub)
@@ -186,4 +179,9 @@ d.text((512, ty + 58),
        font=F(SANS, 15), fill=(90, 90, 100), anchor="mm")
 
 img.save("entry.png", optimize=True)
-print("saved entry.png", img.size)
+import os
+size = os.path.getsize("entry.png")
+if size > 1048576:  # gate cap: fall back to JPEG bytes (name stays entry.png)
+    img.save("entry.png", "JPEG", quality=86)
+    size = os.path.getsize("entry.png")
+print("saved entry.png", img.size, size, "bytes")
