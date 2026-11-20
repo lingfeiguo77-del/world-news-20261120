@@ -60,10 +60,12 @@ for (mx, my, tx, ty) in [(180, 150, 420, 300), (300, 140, 560, 320), (760, 150, 
         d.line([tx, ty, ex, ey], fill=(255, 120, 40), width=3)
 # headline band
 d.rectangle([lx0, ly1 - 86, lx1, ly1], fill=(8, 10, 18))
-d.text((lx0 + 18, ly1 - 62), "RUSSIAN BARRAGE KILLS 3 IN KYIV, BRIDGES HIT",
+d.text((lx0 + 18, ly1 - 62), "RUSSIAN BARRAGE KILLS AT LEAST 3 IN KYIV",
        font=F(SANSB, 31), fill=(255, 255, 255), anchor="lm")
-d.text((lx0 + 18, ly1 - 26), "Power and water cut across the capital · Kyiv Independent / FT",
+d.text((lx0 + 18, ly1 - 26), "Power outages, water disruption in parts of Kyiv · Kyiv Independent / FT",
        font=F(SANS, 19), fill=(200, 205, 220), anchor="lm")
+d.text((lx1 - 14, ly0 + 16), "ILLUSTRATION", font=F(SANSB, 13),
+       fill=(170, 180, 205), anchor="rm")
 d.rectangle([lx0, ly0, lx1, ly1], outline=INK, width=2)
 
 # ---- story grid -------------------------------------------------------------
@@ -162,13 +164,13 @@ def sc_pad(px, py):
 grid = [
     ((0, 128, 140), sc_cyclone, "Cyclone Akvan hits India", "300,000 evacuated · PTI"),
     ((70, 20, 30), sc_chart, "AI sell-off sinks Asia", "KOSPI drops below 5,000 · AP"),
-    ((90, 90, 100), sc_court, "ICJ finds Myanmar genocide", "Against the Rohingya minority"),
+    ((90, 90, 100), sc_court, "ICJ finds Myanmar genocide", "Nov 19 · against the Rohingya"),
     ((30, 40, 90), sc_flags, "Trump · Xi · Putin summit", "Nov 19 · Shenzhen declaration"),
-    ((180, 90, 20), sc_rocket, "Anthropic +17% on Nasdaq", "IPO debut closes up 17%"),
-    ((150, 110, 30), sc_oil, "Hormuz tanker attacks", "Oil near $92.50, risks rise"),
-    ((170, 150, 110), sc_tower, "Missile hits Riyadh tower", "Houthi strike, district damaged"),
+    ((180, 90, 20), sc_rocket, "Anthropic +17% on Nasdaq", "Nov 19 IPO close · Asia slides"),
+    ((150, 110, 30), sc_oil, "Tanker incidents at Hormuz", "Brent ~$92.50 despite attacks"),
+    ((170, 150, 110), sc_tower, "Missile hits Riyadh tower", "Nov 19 · PIF tower damaged"),
     ((30, 120, 70), sc_globe, "COP31 talks stall", "No deal in sight, talks go on"),
-    ((90, 40, 140), sc_pad, "GTA 6 smashes sales records", "Est. $2.3B launch sales"),
+    ((90, 40, 140), sc_pad, "GTA 6 smashes sales records", "Sensor Tower est. $2.36B incl. pre-orders"),
 ]
 gx, gy = 16, 436
 for i, (bg, sc, head, sub) in enumerate(grid):
@@ -177,7 +179,7 @@ for i, (bg, sc, head, sub) in enumerate(grid):
 # ---- ticker + footer ---------------------------------------------------------
 ty = 436 + 3 * 170 + 4
 d.rectangle([16, ty, 1008, ty + 40], fill=NAVY)
-tick = "Kenya: last Ebola patient home · Bukele seeks 3rd term · Japan inflation 2.2%"
+tick = "Malawi fuel queues, 20-litre cap · Nov 19: Bukele seeks 3rd term · Japan core CPI 2.2%"
 d.text((512, ty + 20), tick, font=fit(tick, SANSB, 19, 960), fill=(255, 255, 255), anchor="mm")
 d.text((512, ty + 58),
        "33 sourced stories · AP · AFP · PTI · Kyiv Independent · FT · Xinhua · Al Jazeera",
