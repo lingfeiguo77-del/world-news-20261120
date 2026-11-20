@@ -78,8 +78,8 @@ def panel(px, py, bg, draw_scene, head, sub):
     d.rectangle([px, py, px + pw, py + ph], fill=(255, 255, 255), outline=INK, width=2)
     d.rectangle([px + 2, py + 2, px + pw - 2, py + 88], fill=bg)
     draw_scene(px, py)
-    d.text((px + 12, py + 100), head, font=fit(head, SANSB, 18, pw - 24), fill=INK, anchor="lm")
-    d.text((px + 12, py + 126), sub, font=fit(sub, SANS, 15, pw - 24), fill=(80, 80, 90), anchor="lm")
+    d.text((px + 12, py + 102), head, font=fit(head, SANSB, 21, pw - 24), fill=INK, anchor="lm")
+    d.text((px + 12, py + 132), sub, font=fit(sub, SANSB, 16, pw - 24), fill=(60, 60, 75), anchor="lm")
 
 
 def sc_cyclone(px, py):
@@ -162,13 +162,13 @@ def sc_pad(px, py):
 grid = [
     ((0, 128, 140), sc_cyclone, "Cyclone Akvan hits India", "300,000 evacuated · PTI"),
     ((70, 20, 30), sc_chart, "AI sell-off sinks Asia", "KOSPI drops below 5,000 · AP"),
-    ((90, 90, 100), sc_court, "World Court: Myanmar guilty", "Genocide against the Rohingya"),
-    ((30, 40, 90), sc_flags, "Trump · Xi · Putin summit", "Shenzhen peace declaration"),
-    ((180, 90, 20), sc_rocket, "Anthropic +17% on Nasdaq", "Blockbuster AI debut"),
-    ((150, 110, 30), sc_oil, "Hormuz shut, oil $92.50", "Brent crude climbs"),
+    ((90, 90, 100), sc_court, "ICJ finds Myanmar genocide", "Against the Rohingya minority"),
+    ((30, 40, 90), sc_flags, "Trump · Xi · Putin summit", "Nov 19 · Shenzhen declaration"),
+    ((180, 90, 20), sc_rocket, "Anthropic +17% on Nasdaq", "IPO debut closes up 17%"),
+    ((150, 110, 30), sc_oil, "Hormuz tanker attacks", "Oil near $92.50, risks rise"),
     ((170, 150, 110), sc_tower, "Missile hits Riyadh tower", "Houthi strike, district damaged"),
-    ((30, 120, 70), sc_globe, "COP31 ends with no deal", "Climate talks stall, last day"),
-    ((90, 40, 140), sc_pad, "GTA 6 smashes sales records", "Tops $2.3 billion"),
+    ((30, 120, 70), sc_globe, "COP31 talks stall", "No deal in sight, talks go on"),
+    ((90, 40, 140), sc_pad, "GTA 6 smashes sales records", "Est. $2.3B launch sales"),
 ]
 gx, gy = 16, 436
 for i, (bg, sc, head, sub) in enumerate(grid):
@@ -177,9 +177,8 @@ for i, (bg, sc, head, sub) in enumerate(grid):
 # ---- ticker + footer ---------------------------------------------------------
 ty = 436 + 3 * 170 + 4
 d.rectangle([16, ty, 1008, ty + 40], fill=NAVY)
-tick = ("Japan inflation 2.2% · Kenya's last Ebola patient home · Malawi fuel queues · "
-        "Russell fastest in Vegas · Bukele seeks 3rd term · Gold -4.2%")
-d.text((512, ty + 20), tick, font=fit(tick, SANSB, 16, 960), fill=(255, 255, 255), anchor="mm")
+tick = "Kenya: last Ebola patient home · Bukele seeks 3rd term · Japan inflation 2.2%"
+d.text((512, ty + 20), tick, font=fit(tick, SANSB, 19, 960), fill=(255, 255, 255), anchor="mm")
 d.text((512, ty + 58),
        "33 sourced stories · AP · AFP · PTI · Kyiv Independent · FT · Xinhua · Al Jazeera",
        font=F(SANS, 15), fill=(90, 90, 100), anchor="mm")
